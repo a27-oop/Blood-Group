@@ -1,46 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+
+    <title>LifeLink AI Login</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-red-100 flex justify-center items-center h-screen">
+<body class="bg-red-100 flex justify-center items-center min-h-screen">
 
-    <div class="bg-white p-8 rounded-2xl shadow-2xl w-96">
+    {% if messages %}
 
-        <h1 class="text-3xl font-bold text-center text-red-700 mb-6">
-            Login
+        <div class="absolute top-5">
+
+            {% for message in messages %}
+
+                <div class="bg-red-500 text-white px-6 py-3 rounded-lg mb-2 shadow-lg">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-[400px]">
+
+        <h1 class="text-3xl font-bold text-center text-red-700 mb-2">
+            LifeLink AI
         </h1>
 
-        <form>
+        <p class="text-center text-gray-500 mb-6">
+            Emergency Blood & Medicine Finder
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
 
             <input type="text"
+                   name="student_id"
                    placeholder="Student ID"
-                   class="w-full p-3 mb-4 border rounded-lg">
+                   class="w-full p-3 mb-4 border rounded-lg"
+                   required>
 
             <input type="password"
+                   name="password"
                    placeholder="Password"
-                   class="w-full p-3 mb-4 border rounded-lg">
+                   class="w-full p-3 mb-4 border rounded-lg"
+                   required>
 
-            <button class="w-full bg-red-600 text-white p-3 rounded-lg hover:bg-red-700">
+            <button class="w-full bg-red-600 text-white p-3 rounded-lg hover:bg-red-700 transition">
                 Login
             </button>
 
         </form>
 
-        <p class="text-center mt-4">
+        <p class="text-center mt-5">
+
             Don't have an account yet?
 
-            <a href="/register/" class="text-red-600 font-bold">
+            <a href="/register/" class="text-red-700 font-bold">
                 Create Account
             </a>
+
         </p>
 
     </div>
 
 </body>
+
 </html>

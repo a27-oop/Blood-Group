@@ -3,7 +3,12 @@ from lifelink.settings import BASE_DIR
 
 INSTALLED_APPS = [
     
-    'accounts',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'accounts.apps.AccountsConfig',
     'donor',
     'requestsystem',
     'ai_validation',]

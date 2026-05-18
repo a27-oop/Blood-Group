@@ -1,3 +1,63 @@
 from django.db import models
+import random
+import string
 
-# Create your models here.
+
+def generate_unique_code():
+    return ''.join(random.choices(
+        string.ascii_uppercase + string.digits,
+        k=8
+    ))
+
+
+class UserRegistration(models.Model):
+
+    BLOOD_GROUPS = [
+        ('A+', 'A+'),
+        ('A-', 'A-'),
+        ('B+', 'B+'),
+        ('B-', 'B-'),
+        ('AB+', 'AB+'),
+        ('AB-', 'AB-'),
+        ('O+', 'O+'),
+        ('O-', 'O-'),
+    ]
+
+    full_name = models.CharField(max_length=100)
+
+    mobile = models.CharField(max_length=11)
+
+    email = models.EmailField(unique=True)
+
+    blood_group = models.CharField(
+        max_length=5,
+        choices=BLOOD_GROUPS
+    )
+
+    university = models.CharField(max_length=200)
+
+    student_id = models.CharField(
+        max_length=50,
+        unique=True
+    )
+
+    district = models.CharField(max_length=100)
+
+    thana = models.CharField(max_length=100)
+
+    union = models.CharField(max_length=100)
+
+    village = models.CharField(max_length=100)
+
+    password = models.CharField(max_length=255)
+
+    unique_code = models.CharField(
+        max_length=8,
+        unique=True,
+        default=generate_unique_code
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.full_name
