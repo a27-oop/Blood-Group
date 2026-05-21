@@ -1,3 +1,5 @@
+import re                                                                                                         
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from .models import UserRegistration
 from django.contrib import messages
@@ -20,7 +22,117 @@ def register(request):
         village = request.POST.get('village')
         password = request.POST.get('password')
 
+        # Fake Phone Detection
+
+        if not re.match(r'^01[3-9]\d{8}$', mobile):
+
+            messages.error(request, "Invalid Bangladeshi Phone Number")
+
+            return redirect('register')
+
+        # Duplicate Email Check
+
+        if UserRegistration.objects.filter(email=email).exists():
+
+            messages.error(request, "Email Already Exists")
+
+            return redirect('register')
+
+        # Duplicate Student ID
+
+        if UserRegistration.objects.filter(student_id=student_id).exists():
+
+            messages.error(request, "Student ID Already Exists")
+
+            return redirect('register')
+
+        # Duplicate Phone
+
+        if UserRegistration.objects.filter(mobile=mobile).exists():
+
+            messages.error(request, "Phone Number Already Exists")
+
+            return redirect('register')
+        # AI Fraud Score System
+
+        fraud_score = 0
+
+        # Suspicious patterns
+
+        if "test" in full_name.lower():
+            fraud_score += 2
+
+        if mobile.endswith("000"):
+          fraud_score += 2
+
+        if len(password) < 8:
+           fraud_score += 2
+
+        if district.lower() == "unknown":
+           fraud_score += 3
+
+# Block suspicious account
+
+        if fraud_score >= 5:
+
+          messages.error(
+            request,
+            "Suspicious Activity Detected"
+            )
+          
+
+          return redirect('register')
+        
+        # Password Strength Validation
+
+        if len(password) < 8:
+
+           messages.error(request, "Password Must Be At Least 8 Characters")
+
+           return redirect('register')
+
+
+        if password.isdigit():
+
+           messages.error(request, "Password Cannot Be Only Numbers")
+
+           return redirect('register')
+        # Suspicious Name Detection
+
+        if len(full_name) < 3:
+
+           messages.error(request, "Invalid Full Name")
+
+           return redirect('register')
+
+
+        if full_name.isdigit():
+
+           messages.error(request, "Name Cannot Be Numbers")
+
+           return redirect('register')
+
+        # Repeated Digit Detection
+
+        if mobile == mobile[0] * len(mobile):
+
+            messages.error(request, "Fake Phone Number Detected")
+
+            return redirect('register')
+
+        # Password Validation
+
+        if len(password) < 8:
+
+            messages.error(request, "Password Must Be At Least 8 Characters")
+
+            return redirect('register')
+
+        # Hash Password
+
         hashed_password = make_password(password)
+
+        # Create User
 
         UserRegistration.objects.create(
             full_name=full_name,
@@ -90,3 +202,24 @@ def logout_view(request):
     request.session.flush()
 
     return redirect('login')
+def donor_search(request):
+
+    donors = UserRegistration.objects.all()
+
+    blood_group = request.GET.get('blood_group')
+
+    district = request.GET.get('district')
+
+    if blood_group:
+        donors = donors.filter(
+            blood_group=blood_group
+        )
+
+    if district:
+        donors = donors.filter(
+            district__icontains=district
+        )
+
+    return render(request, 'donor_search.html', {
+        'donors': donors
+    })
