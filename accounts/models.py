@@ -61,3 +61,23 @@ class UserRegistration(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class EmergencyRequest(models.Model):
+
+    patient_name = models.CharField(max_length=100)
+
+    blood_group = models.CharField(max_length=5)
+
+    district = models.CharField(max_length=100)
+
+    hospital = models.CharField(max_length=200)
+
+    contact_number = models.CharField(max_length=11)
+
+    message = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.patient_name
