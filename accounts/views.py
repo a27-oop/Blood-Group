@@ -1,7 +1,7 @@
-import re                                                                                                         
+import re                                                                                                       
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from .models import UserRegistration
+from .models import UserRegistration, EmergencyRequest
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -223,3 +223,45 @@ def donor_search(request):
     return render(request, 'donor_search.html', {
         'donors': donors
     })
+def home(request):
+
+    return redirect('login')
+def emergency_request(request):
+
+    if request.method == "POST":
+
+        patient_name = request.POST.get('patient_name')
+
+        blood_group = request.POST.get('blood_group')
+
+        district = request.POST.get('district')
+
+        hospital = request.POST.get('hospital')
+
+        contact_number = request.POST.get('contact_number')
+
+        message = request.POST.get('message')
+
+        EmergencyRequest.objects.create(
+            patient_name=patient_name,
+            blood_group=blood_group,
+            district=district,
+            hospital=hospital,
+            contact_number=contact_number,
+            message=message
+        )
+
+        messages.success(
+            request,
+            "Emergency Request Posted Successfully!"
+        )
+
+        return redirect('emergency_request')
+
+    requests = EmergencyRequest.objects.all().order_by('-id')
+
+    return render(request,
+                  'emergency_request.html',
+                  {
+                      'requests': requests
+                  })
