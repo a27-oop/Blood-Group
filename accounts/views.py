@@ -265,3 +265,8 @@ def emergency_request(request):
                   {
                       'requests': requests
                   })
+def health_tips(request):
+    return render(
+        request,
+        'health_tips.html'
+    )

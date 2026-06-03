@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Emergency Request</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-red-100 min-h-screen">
+
+    <nav class="bg-red-700 text-white p-4 flex justify-between">
+
+        <h1 class="text-2xl font-bold">
+            LifeLink AI
+        </h1>
+
+        <a href="/dashboard/"
+           class="bg-white text-red-700 px-4 py-2 rounded-lg">
+
+            Dashboard
+
+        </a>
+
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-10">
+
+        <!-- Request Form -->
+
+        <div class="bg-white p-8 rounded-2xl shadow-lg mb-10">
+
+            <h2 class="text-3xl font-bold text-red-700 mb-6">
+
+                Emergency Blood Request
+
+            </h2>
+
+            <form method="POST"
+                  class="grid grid-cols-2 gap-4">
+
+                {% csrf_token %}
+
+                <input type="text"
+                       name="patient_name"
+                       placeholder="Patient Name"
+                       class="p-3 border rounded-lg"
+                       required>
+
+                <select name="blood_group"
+                        class="p-3 border rounded-lg"
+                        required>
+
+                    <option value="">Select Blood Group</option>
+
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+
+                </select>
+
+                <input type="text"
+                       name="district"
+                       placeholder="District"
+                       class="p-3 border rounded-lg"
+                       required>
+
+                <input type="text"
+                       name="hospital"
+                       placeholder="Hospital Name"
+                       class="p-3 border rounded-lg"
+                       required>
+
+                <input type="text"
+                       name="contact_number"
+                       placeholder="Contact Number"
+                       class="p-3 border rounded-lg"
+                       required>
+
+                <textarea name="message"
+                          placeholder="Emergency Details"
+                          class="p-3 border rounded-lg col-span-2"
+                          rows="4"></textarea>
+
+                <button class="bg-red-600 text-white p-3 rounded-lg col-span-2 hover:bg-red-700">
+
+                    Post Emergency Request
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Recent Requests -->
+
+        <h2 class="text-3xl font-bold text-red-700 mb-6">
+
+            Recent Emergency Requests
+
+        </h2>
+
+        <div class="grid grid-cols-2 gap-6">
+
+            {% for request_item in requests %}
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-l-8 border-red-600">
+
+                <div class="flex justify-between items-center mb-4">
+
+                    <h3 class="text-2xl font-bold text-red-700">
+
+                        {{ request_item.patient_name }}
+
+                    </h3>
+
+                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm">
+
+                        URGENT
+
+                    </span>
+
+                </div>
+
+                <p class="mb-2">
+
+                    <strong>Blood Group:</strong>
+                    {{ request_item.blood_group }}
+
+                </p>
+
+                <p class="mb-2">
+
+                    <strong>District:</strong>
+                    {{ request_item.district }}
+
+                </p>
+
+                <p class="mb-2">
+
+                    <strong>Hospital:</strong>
+                    {{ request_item.hospital }}
+
+                </p>
+
+                <p class="mb-2">
+
+                    <strong>Contact:</strong>
+                    {{ request_item.contact_number }}
+
+                </p>
+
+                <p class="mb-4">
+
+                    <strong>Message:</strong>
+                    {{ request_item.message }}
+
+                </p>
+
+                <button class="bg-green-600 text-white px-4 py-2 rounded-lg">
+
+                    I Want To Donate
+
+                </button>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
