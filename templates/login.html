@@ -1,42 +1,61 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>LifeLink AI Login</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LifeLink AI</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
-<body class="bg-red-100 flex justify-center items-center min-h-screen">
 
-    {% if messages %}
+<body class="bg-red-900 min-h-screen flex items-center justify-center">
+    <style>
+        body{
+            background-image: url("{% static 'images/blood-bg.jpg' %}");
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
 
-        <div class="absolute top-5">
+        }
+    </style>
 
-            {% for message in messages %}
+    <!-- Top Left Logo -->
 
-                <div class="bg-red-500 text-white px-6 py-3 rounded-lg mb-2 shadow-lg">
-                    {{ message }}
-                </div>
+    <div class="fixed top-6 left-6 flex items-center gap-3 z-50">
 
-            {% endfor %}
-
+        <div class="text-5xl">
+            🩸
         </div>
 
-    {% endif %}
-
-    <div class="bg-white p-8 rounded-2xl shadow-2xl w-[400px]">
-
-        <h1 class="text-3xl font-bold text-center text-red-700 mb-2">
+        <h1 class="text-white text-3xl font-extrabold tracking-wide">
             LifeLink AI
         </h1>
 
-        <p class="text-center text-gray-500 mb-6">
-            Emergency Blood & Medicine Finder
+    </div>    
+
+    <div class="bg-white/10 backdrop-blur-lg p-10 rounded-3xl shadow-2xl w-[450px] border border-white/20">
+
+
+        <!-- Heading -->
+
+        <h2 class="text-3xl font-bold text-white text-center mb-4">
+            Welcome
+        </h2>
+
+        <p class="text-center text-white mb-8 text-xl">
+            আপনার রক্ত দানই পারে কারো জীবন বাঁচাতে ❤️
         </p>
+
+        <!-- Login Form -->
 
         <form method="POST">
 
@@ -45,27 +64,30 @@
             <input type="text"
                    name="student_id"
                    placeholder="Student ID"
-                   class="w-full p-3 mb-4 border rounded-lg"
+                   class="w-full p-4 mb-5 rounded-xl bg-white/90 outline-none"
                    required>
 
             <input type="password"
                    name="password"
                    placeholder="Password"
-                   class="w-full p-3 mb-4 border rounded-lg"
+                   class="w-full p-4 mb-6 rounded-xl bg-white/90 outline-none"
                    required>
 
-            <button class="w-full bg-red-600 text-white p-3 rounded-lg hover:bg-red-700 transition">
+            <button class="w-full bg-red-700 hover:bg-red-800 text-white p-4 rounded-xl text-lg font-bold transition">
                 Login
             </button>
 
         </form>
 
-        <p class="text-center mt-5">
+        <p class="text-center text-white mt-6">
 
-            Don't have an account yet?
+            Don't have an account?
 
-            <a href="/register/" class="text-red-700 font-bold">
+            <a href="/register/"
+               class="font-bold text-red-300 hover:text-red-200">
+
                 Create Account
+
             </a>
 
         </p>

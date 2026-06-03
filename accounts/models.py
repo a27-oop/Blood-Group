@@ -61,8 +61,7 @@ class UserRegistration(models.Model):
 
     def __str__(self):
         return self.full_name
-
-
+    
 class EmergencyRequest(models.Model):
 
     patient_name = models.CharField(max_length=100)
@@ -81,3 +80,14 @@ class EmergencyRequest(models.Model):
 
     def __str__(self):
         return self.patient_name
+    
+class OTPVerification(models.Model):
+
+    mobile = models.CharField(max_length=11)
+
+    otp_code = models.CharField(max_length=6)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.mobile    
