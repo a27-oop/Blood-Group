@@ -169,11 +169,30 @@
 
                 </p>
 
-                <button class="bg-green-600 text-white px-4 py-2 rounded-lg">
+                <div class="flex gap-3">
 
-                    I Want To Donate
+                 <a href="tel:{{ request_item.contact_number }}">
+
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg">
+
+                     📞 Call
 
                 </button>
+
+            </a>
+
+                 <a href="https://wa.me/88{{ request_item.contact_number }}"
+                    target="_blank">
+
+                 <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+
+                    💬 WhatsApp
+
+                </button>
+
+            </a>
+
+            </div>
 
             </div>
 

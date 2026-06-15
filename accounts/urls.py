@@ -18,10 +18,12 @@ urlpatterns = [
     'emergency-request/',
     views.emergency_request,
     name='emergency_request'),
+
     path(
     'health-tips/',
     views.health_tips,
-    name='health_tips'
+    name='health_tips'),
+    
 
-),
+
 ]

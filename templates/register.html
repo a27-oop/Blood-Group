@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +11,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-red-100 flex justify-center items-center min-h-screen py-10">
+<body class="min-h-screen flex justify-center items-center py-10"style="
+background: url('{% static 'images/blood-bg.jpg' %}') no-repeat center center fixed;
+background-size: cover;
+">
+    
 
     <div class="bg-white p-8 rounded-2xl shadow-2xl w-[500px]">
 
