@@ -16,31 +16,43 @@
 
 <body class="bg-red-100 min-h-screen">
 
-    <nav class="bg-red-700 text-white p-4 flex justify-between">
+    <!-- Navbar -->
+
+    <nav class="bg-red-700 text-white p-4 flex justify-between items-center">
 
         <h1 class="text-2xl font-bold">
             LifeLink AI
         </h1>
 
         <a href="/dashboard/"
-           class="bg-white text-red-700 px-4 py-2 rounded-lg">
-
+           class="bg-white text-red-700 px-4 py-2 rounded-lg hover:bg-gray-100">
             Dashboard
-
         </a>
 
     </nav>
 
     <div class="max-w-6xl mx-auto p-10">
 
+        <!-- Success Message -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="bg-green-500 text-white p-4 rounded-lg mb-6">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
         <!-- Request Form -->
 
         <div class="bg-white p-8 rounded-2xl shadow-lg mb-10">
 
             <h2 class="text-3xl font-bold text-red-700 mb-6">
-
                 Emergency Blood Request
-
             </h2>
 
             <form method="POST"
@@ -91,13 +103,11 @@
 
                 <textarea name="message"
                           placeholder="Emergency Details"
-                          class="p-3 border rounded-lg col-span-2"
-                          rows="4"></textarea>
+                          rows="4"
+                          class="p-3 border rounded-lg col-span-2"></textarea>
 
                 <button class="bg-red-600 text-white p-3 rounded-lg col-span-2 hover:bg-red-700">
-
                     Post Emergency Request
-
                 </button>
 
             </form>
@@ -106,11 +116,13 @@
 
         <!-- Recent Requests -->
 
-        <h2 class="text-3xl font-bold text-red-700 mb-6">
-
+        <h2 class="text-3xl font-bold text-red-700 mb-4">
             Recent Emergency Requests
-
         </h2>
+
+        <p class="text-lg font-semibold text-blue-700 mb-6">
+            Total Requests: {{ requests|length }}
+        </p>
 
         <div class="grid grid-cols-2 gap-6">
 
@@ -121,78 +133,64 @@
                 <div class="flex justify-between items-center mb-4">
 
                     <h3 class="text-2xl font-bold text-red-700">
-
                         {{ request_item.patient_name }}
-
                     </h3>
 
                     <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm">
-
                         URGENT
-
                     </span>
 
                 </div>
 
                 <p class="mb-2">
-
                     <strong>Blood Group:</strong>
                     {{ request_item.blood_group }}
-
                 </p>
 
                 <p class="mb-2">
-
                     <strong>District:</strong>
                     {{ request_item.district }}
-
                 </p>
 
                 <p class="mb-2">
-
                     <strong>Hospital:</strong>
                     {{ request_item.hospital }}
-
                 </p>
 
                 <p class="mb-2">
-
                     <strong>Contact:</strong>
                     {{ request_item.contact_number }}
-
                 </p>
 
                 <p class="mb-4">
-
                     <strong>Message:</strong>
                     {{ request_item.message }}
-
                 </p>
 
                 <div class="flex gap-3">
 
-                 <a href="tel:{{ request_item.contact_number }}">
+                    <a href="tel:{{ request_item.contact_number }}"
+                       class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        📞 Call
+                    </a>
 
-                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg">
+                    <a href="https://wa.me/88{{ request_item.contact_number }}"
+                       target="_blank"
+                       class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        💬 WhatsApp
+                    </a>
 
-                     📞 Call
-
-                </button>
-
-            </a>
-
-                 <a href="https://wa.me/88{{ request_item.contact_number }}"
-                    target="_blank">
-
-                 <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-
-                    💬 WhatsApp
-
-                </button>
-
-            </a>
+                </div>
 
             </div>
+
+            {% empty %}
+
+            <div class="col-span-2 bg-white p-8 rounded-xl shadow-lg text-center">
+
+                <h2 class="text-2xl text-gray-600">
+                    No Emergency Requests Found.
+                </h2>
 
             </div>
 

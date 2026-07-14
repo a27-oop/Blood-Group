@@ -271,31 +271,3 @@ def health_tips(request):
         request,
         'health_tips.html'
     )
-def emergency_request(request):
-
-    if request.method == "POST":
-
-        EmergencyRequest.objects.create(
-
-            patient_name=request.POST.get('patient_name'),
-
-            blood_group=request.POST.get('blood_group'),
-
-            district=request.POST.get('district'),
-
-            hospital=request.POST.get('hospital'),
-
-            contact_number=request.POST.get('contact_number'),
-
-            message=request.POST.get('message')
-        )
-
-        messages.success(
-            request,
-            "Emergency Request Submitted!"
-        )
-
-    return render(
-        request,
-        'emergency_request.html'
-    )
