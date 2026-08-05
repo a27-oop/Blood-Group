@@ -6,6 +6,37 @@ from .models import UserRegistration, EmergencyRequest
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
+def rank_donors(donors, request_blood, request_district):
+
+    ranked = []
+
+    for donor in donors:
+
+        score = 0
+
+        if donor.blood_group == request_blood:
+            score += 50
+
+        if donor.district.lower() == request_district.lower():
+            score += 30
+
+        if score >= 80:
+            stars = "⭐⭐⭐⭐⭐ Best Match"
+        elif score >= 50:
+            stars = "⭐⭐⭐⭐"
+        else:
+            stars = "⭐⭐⭐"
+
+        ranked.append({
+            "donor": donor,
+            "score": score,
+            "stars": stars
+        })
+
+    ranked.sort(key=lambda x: x["score"], reverse=True)
+
+    return ranked
+
 def get_compatible_donors(blood_group):
 
     compatibility = {
@@ -299,9 +330,14 @@ def emergency_request(request):
         )
 
         compatible_donors = get_compatible_donors(blood_group)
-        recommended_donors = UserRegistration.objects.filter(
-            district__iexact=district,
+        donors = UserRegistration.objects.filter(
             blood_group__in=compatible_donors
+        )
+
+        recommended_donors = rank_donors(
+            donors,
+            blood_group,
+            district
         )
 
         priority = get_priority(message)
