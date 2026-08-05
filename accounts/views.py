@@ -6,6 +6,53 @@ from .models import UserRegistration, EmergencyRequest
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
+def get_compatible_donors(blood_group):
+
+    compatibility = {
+        "A+": ["A+", "A-", "O+", "O-"],
+        "A-": ["A-", "O-"],
+        "B+": ["B+", "B-", "O+", "O-"],
+        "B-": ["B-", "O-"],
+        "AB+": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+        "AB-": ["A-", "B-", "AB-", "O-"],
+        "O+": ["O+", "O-"],
+        "O-": ["O-"],
+    }
+
+    return compatibility.get(blood_group, [])
+
+def get_priority(message):
+
+    message = message.lower()
+
+    high_keywords = [
+        "urgent",
+        "critical",
+        "accident",
+        "operation",
+        "icu",
+        "1 hour",
+        "2 hour",
+        "immediately",
+        "emergency",
+    ]
+
+    medium_keywords = [
+        "today",
+        "tonight",
+        "tomorrow",
+    ]
+
+    for word in high_keywords:
+        if word in message:
+            return "🔴 HIGH PRIORITY"
+
+    for word in medium_keywords:
+        if word in message:
+            return "🟡 MEDIUM PRIORITY"
+
+    return "🟢 LOW PRIORITY"
+
 
 def register(request):
 
@@ -229,19 +276,18 @@ def home(request):
     return redirect('login')
 def emergency_request(request):
 
+    priority = None
+    compatible_donors = []
+    recommended_donors = []
+
     if request.method == "POST":
 
-        patient_name = request.POST.get('patient_name')
-
-        blood_group = request.POST.get('blood_group')
-
-        district = request.POST.get('district')
-
-        hospital = request.POST.get('hospital')
-
-        contact_number = request.POST.get('contact_number')
-
-        message = request.POST.get('message')
+        patient_name = request.POST.get("patient_name")
+        blood_group = request.POST.get("blood_group")
+        district = request.POST.get("district")
+        hospital = request.POST.get("hospital")
+        contact_number = request.POST.get("contact_number")
+        message = request.POST.get("message")
 
         EmergencyRequest.objects.create(
             patient_name=patient_name,
@@ -249,23 +295,42 @@ def emergency_request(request):
             district=district,
             hospital=hospital,
             contact_number=contact_number,
-            message=message
+            message=message,
         )
 
-        messages.success(
+        compatible_donors = get_compatible_donors(blood_group)
+        recommended_donors = UserRegistration.objects.filter(
+            district__iexact=district,
+            blood_group__in=compatible_donors
+        )
+
+        priority = get_priority(message)
+
+        requests = EmergencyRequest.objects.all().order_by("-id")
+
+        return render(
             request,
-            "Emergency Request Posted Successfully!"
+            "emergency_request.html",
+            {
+                "requests": requests,
+                "compatible_donors": compatible_donors,
+                "recommended_donors": recommended_donors,
+                "priority": priority,
+            },
         )
 
-        return redirect('emergency_request')
+    requests = EmergencyRequest.objects.all().order_by("-id")
 
-    requests = EmergencyRequest.objects.all().order_by('-id')
-
-    return render(request,
-                  'emergency_request.html',
-                  {
-                      'requests': requests
-                  })
+    return render(
+        request,
+        "emergency_request.html",
+        {
+            "requests": requests,
+            "compatible_donors": compatible_donors,
+            "recommended_donors": recommended_donors,
+            "priority": priority,
+        },
+    )
 def health_tips(request):
     return render(
         request,

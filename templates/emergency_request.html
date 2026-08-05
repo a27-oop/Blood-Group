@@ -111,6 +111,52 @@
                 </button>
 
             </form>
+                {% if compatible_donors %}
+
+    <div class="bg-blue-100 border-l-4 border-blue-600 p-6 rounded-xl mt-8">
+
+        <h2 class="text-2xl font-bold text-blue-700">
+            🤖 AI Blood Compatibility Result
+        </h2>
+
+        <p class="mt-3 font-semibold">
+            Compatible Blood Groups:
+        </p>
+
+        <div class="flex flex-wrap gap-3 mt-4">
+
+            {% for blood in compatible_donors %}
+
+            <span class="bg-blue-600 text-white px-4 py-2 rounded-full">
+                {{ blood }}
+            </span>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+        "recommended_donors": recommended_donors,
+    {% if priority %}
+
+        <div class="bg-yellow-100 border-l-4 border-yellow-600 p-6 rounded-xl mt-6">
+
+            <h2 class="text-2xl font-bold text-yellow-700">
+                🤖 AI Emergency Analysis
+            </h2>
+
+            <p class="text-xl mt-3 font-bold">
+                Priority Level:
+            </p>
+
+            <p class="text-2xl mt-2">
+                {{ priority }}
+            </p>
+
+        </div>
+    {% endif %}
+    
+    {% endif %}
 
         </div>
 
@@ -118,6 +164,44 @@
 
         <h2 class="text-3xl font-bold text-red-700 mb-4">
             Recent Emergency Requests
+                    {% if recommended_donors %}
+
+        <div class="bg-green-100 mt-10 p-6 rounded-xl shadow-lg">
+
+            <h2 class="text-3xl font-bold text-green-700 mb-5">
+                🤖 AI Recommended Donors
+            </h2>
+
+            <div class="grid grid-cols-2 gap-4">
+
+                {% for donor in recommended_donors %}
+
+                <div class="bg-white p-5 rounded-xl shadow">
+
+                    <h3 class="text-xl font-bold">
+                        {{ donor.full_name }}
+                    </h3>
+
+                    <p><strong>Blood:</strong> {{ donor.blood_group }}</p>
+
+                    <p><strong>District:</strong> {{ donor.district }}</p>
+
+                    <p><strong>Phone:</strong> {{ donor.mobile }}</p>
+
+                    <a href="tel:{{ donor.mobile }}"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg inline-block mt-3">
+                        📞 Call
+                    </a>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
         </h2>
 
         <p class="text-lg font-semibold text-blue-700 mb-6">
