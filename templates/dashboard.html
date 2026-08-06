@@ -4,9 +4,7 @@
 <head>
 
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Dashboard</title>
 
@@ -24,9 +22,7 @@
 
         <a href="/logout/"
            class="bg-white text-red-700 px-4 py-2 rounded-lg">
-
             Logout
-
         </a>
 
     </nav>
@@ -34,82 +30,95 @@
     <div class="p-10">
 
         <h2 class="text-3xl font-bold mb-8">
-
             Welcome, {{ user.full_name }}
-
         </h2>
 
-        <div class="grid grid-cols-3 gap-6">
+        <!-- Dashboard Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
 
-            <!-- Donor -->
-
+            <!-- Total Donors -->
             <a href="/find-donor/">
 
-                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition text-center">
 
-                    <h3 class="text-2xl font-bold text-red-700 mb-3">
-                        Donor
+                    <h3 class="text-2xl font-bold text-red-700">
+                        🩸 Donors
                     </h3>
 
-                    <p>
-                        Find blood donors quickly.
+                    <p class="text-gray-500 mt-2">
+                        Registered Donors
+                    </p>
+
+                    <p class="text-5xl font-bold text-red-600 mt-5">
+                        {{ total_donors }}
                     </p>
 
                 </div>
 
             </a>
 
-            <!-- Emergency -->
-
+            <!-- Emergency Requests -->
             <a href="/emergency-request/">
 
-                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition text-center">
 
-                    <h3 class="text-2xl font-bold text-red-700 mb-3">
-                        Emergency
+                    <h3 class="text-2xl font-bold text-red-700">
+                        🚨 Emergency
                     </h3>
 
-                    <p>
-                        View emergency blood requests.
+                    <p class="text-gray-500 mt-2">
+                        Total Requests
+                    </p>
+
+                    <p class="text-5xl font-bold text-red-600 mt-5">
+                        {{ total_requests }}
                     </p>
 
                 </div>
 
             </a>
 
-            <!-- Health Tips -->
+            <!-- Blood Groups -->
+            <a href="/find-donor/">
 
-            <a href="/health-tips/">
+                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition text-center">
 
-                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition cursor-pointer">
-
-                    <h3 class="text-2xl font-bold text-red-700 mb-3">
-                        Health Tips
+                    <h3 class="text-2xl font-bold text-red-700">
+                        ❤️ Blood Groups
                     </h3>
 
-                    <p>
-                        Stay healthy after donating blood.
+                    <p class="text-gray-500 mt-2">
+                        Available Groups
+                    </p>
+
+                    <p class="text-5xl font-bold text-red-600 mt-5">
+                        {{ blood_groups }}
                     </p>
 
                 </div>
 
+            </a>
+
+            <!-- AI -->
             <a href="/emergency-request/">
 
-                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition cursor-pointer">
+                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition text-center">
 
-                    <h3 class="text-2xl font-bold text-red-700 mb-3">
-                     Emergency
-                </h3>
+                    <h3 class="text-2xl font-bold text-red-700">
+                        🤖 AI Matches
+                    </h3>
 
-                <p>
-                   Request blood in emergency situations.
-                </p>
+                    <p class="text-gray-500 mt-2">
+                        Smart Recommendation
+                    </p>
 
-            </div>
+                    <p class="text-5xl font-bold text-red-600 mt-5">
+                        Coming Soon
+                    </p>
 
-        </a>    
+                </div>
 
-        </a>
+            </a>
 
         </div>
 

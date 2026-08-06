@@ -14,26 +14,44 @@ def rank_donors(donors, request_blood, request_district):
 
         score = 0
 
+        # Blood Match
         if donor.blood_group == request_blood:
-            score += 50
+            score += 60
+        else:
+            score += 40
 
+        # District Match
         if donor.district.lower() == request_district.lower():
             score += 30
 
-        if score >= 80:
+        # AI Bonus
+        score += 10
+
+        # Stars
+        if score >= 95:
             stars = "⭐⭐⭐⭐⭐ Best Match"
-        elif score >= 50:
-            stars = "⭐⭐⭐⭐"
+
+        elif score >= 80:
+            stars = "⭐⭐⭐⭐ Excellent"
+
+        elif score >= 60:
+            stars = "⭐⭐⭐ Good"
+
         else:
-            stars = "⭐⭐⭐"
+            stars = "⭐⭐ Average"
 
         ranked.append({
+
             "donor": donor,
             "score": score,
             "stars": stars
+
         })
 
-    ranked.sort(key=lambda x: x["score"], reverse=True)
+    ranked.sort(
+        key=lambda x: x["score"],
+        reverse=True
+    )
 
     return ranked
 
@@ -271,9 +289,31 @@ def dashboard(request):
 
     user = UserRegistration.objects.get(id=user_id)
 
-    return render(request, 'dashboard.html', {
-        'user': user
-    })
+    total_donors = UserRegistration.objects.count()
+
+    total_requests = EmergencyRequest.objects.count()
+
+    blood_groups = UserRegistration.objects.values(
+        "blood_group"
+    ).distinct().count()
+
+    context = {
+
+        "user": user,
+
+        "total_donors": total_donors,
+
+        "total_requests": total_requests,
+
+        "blood_groups": blood_groups,
+
+    }
+
+    return render(
+        request,
+        "dashboard.html",
+        context
+    )
 
 
 def logout_view(request):
