@@ -290,30 +290,13 @@ def dashboard(request):
     user = UserRegistration.objects.get(id=user_id)
 
     total_donors = UserRegistration.objects.count()
-
     total_requests = EmergencyRequest.objects.count()
 
-    blood_groups = UserRegistration.objects.values(
-        "blood_group"
-    ).distinct().count()
-
-    context = {
-
-        "user": user,
-
-        "total_donors": total_donors,
-
-        "total_requests": total_requests,
-
-        "blood_groups": blood_groups,
-
-    }
-
-    return render(
-        request,
-        "dashboard.html",
-        context
-    )
+    return render(request, 'dashboard.html', {
+        'user': user,
+        'total_donors': total_donors,
+        'total_requests': total_requests,
+    })
 
 
 def logout_view(request):

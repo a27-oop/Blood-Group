@@ -4,121 +4,289 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LifeLink AI Dashboard</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
-<body class="bg-red-100 min-h-screen">
+<body class="bg-gradient-to-br from-red-50 via-white to-red-100 min-h-screen">
 
-    <nav class="bg-red-700 text-white p-4 flex justify-between">
+    <!-- Navbar -->
 
-        <h1 class="text-2xl font-bold">
-            LifeLink AI
-        </h1>
+    <nav class="bg-red-700 shadow-lg">
 
-        <a href="/logout/"
-           class="bg-white text-red-700 px-4 py-2 rounded-lg">
-            Logout
-        </a>
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+            <div>
+
+                <h1 class="text-3xl font-bold text-white">
+                    🩸 LifeLink AI
+                </h1>
+
+                <p class="text-red-100 text-sm">
+                    Emergency Blood Management System
+                </p>
+
+            </div>
+
+            <a href="/logout/"
+               class="bg-white text-red-700 px-5 py-2 rounded-xl font-semibold hover:bg-gray-100 transition">
+
+                Logout
+
+            </a>
+
+        </div>
 
     </nav>
 
-    <div class="p-10">
+    <!-- Main Container -->
 
-        <h2 class="text-3xl font-bold mb-8">
-            Welcome, {{ user.full_name }}
-        </h2>
+    <div class="max-w-7xl mx-auto px-6 py-10">
+
+        <!-- Welcome -->
+
+        <div class="mb-10">
+
+            <h2 class="text-5xl font-bold text-gray-800">
+
+                Welcome,
+                <span class="text-red-700">
+
+                    {{ user.full_name }}
+
+                </span>
+
+                👋
+
+            </h2>
+
+            <p class="text-gray-600 text-xl mt-3">
+
+                How can we help you today?
+
+            </p>
+
+        </div>
 
         <!-- Dashboard Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
 
-            <!-- Total Donors -->
+        <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Donor Search -->
+
             <a href="/find-donor/">
 
-                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition text-center">
+                <div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl hover:-translate-y-2 transition duration-300 border-l-8 border-red-600">
 
-                    <h3 class="text-2xl font-bold text-red-700">
-                        🩸 Donors
+                    <div class="text-6xl mb-4">
+                        🩸
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-red-700">
+                        Donor Search
                     </h3>
 
-                    <p class="text-gray-500 mt-2">
-                        Registered Donors
+                    <p class="text-gray-600 mt-3">
+                        Search blood donors by blood group and district.
                     </p>
 
-                    <p class="text-5xl font-bold text-red-600 mt-5">
-                        {{ total_donors }}
-                    </p>
+                    <div class="mt-6">
+
+                        <span class="bg-red-600 text-white px-5 py-2 rounded-xl">
+                            Open →
+                        </span>
+
+                    </div>
 
                 </div>
 
             </a>
 
-            <!-- Emergency Requests -->
+            <!-- Emergency Request -->
+
             <a href="/emergency-request/">
 
-                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition text-center">
+                <div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl hover:-translate-y-2 transition duration-300 border-l-8 border-red-600">
 
-                    <h3 class="text-2xl font-bold text-red-700">
-                        🚨 Emergency
+                    <div class="text-6xl mb-4">
+                        🚨
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-red-700">
+                        Emergency
                     </h3>
 
-                    <p class="text-gray-500 mt-2">
-                        Total Requests
+                    <p class="text-gray-600 mt-3">
+                        Create and manage emergency blood requests.
                     </p>
 
-                    <p class="text-5xl font-bold text-red-600 mt-5">
-                        {{ total_requests }}
-                    </p>
+                    <div class="mt-6">
+
+                        <span class="bg-red-600 text-white px-5 py-2 rounded-xl">
+                            Open →
+                        </span>
+
+                    </div>
 
                 </div>
 
             </a>
 
-            <!-- Blood Groups -->
-            <a href="/find-donor/">
+            <!-- Health Tips -->
 
-                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition text-center">
+            <a href="/health-tips/">
 
-                    <h3 class="text-2xl font-bold text-red-700">
-                        ❤️ Blood Groups
+                <div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl hover:-translate-y-2 transition duration-300 border-l-8 border-green-600">
+
+                    <div class="text-6xl mb-4">
+                        ❤️
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-green-700">
+                        Health Tips
                     </h3>
 
-                    <p class="text-gray-500 mt-2">
-                        Available Groups
+                    <p class="text-gray-600 mt-3">
+                        Read health tips before and after blood donation.
                     </p>
 
-                    <p class="text-5xl font-bold text-red-600 mt-5">
-                        {{ blood_groups }}
+                    <div class="mt-6">
+
+                        <span class="bg-green-600 text-white px-5 py-2 rounded-xl">
+                            Open →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>     
+                    <!-- My Profile -->
+
+            <a href="#">
+
+                <div class="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl hover:-translate-y-2 transition duration-300 border-l-8 border-blue-600">
+
+                    <div class="text-6xl mb-4">
+                        👤
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-blue-700">
+                        My Profile
+                    </h3>
+
+                    <p class="text-gray-600 mt-3">
+                        View your personal information and blood donor profile.
                     </p>
+
+                    <div class="mt-6">
+
+                        <span class="bg-blue-600 text-white px-5 py-2 rounded-xl">
+                            Coming Soon
+                        </span>
+
+                    </div>
 
                 </div>
 
             </a>
 
-            <!-- AI -->
-            <a href="/emergency-request/">
+            <!-- AI Statistics -->
 
-                <div class="bg-white p-6 rounded-2xl shadow-lg hover:scale-105 transition text-center">
+            <div class="bg-white rounded-3xl shadow-lg p-8 border-l-8 border-purple-600">
 
-                    <h3 class="text-2xl font-bold text-red-700">
-                        🤖 AI Matches
-                    </h3>
+                <div class="text-6xl mb-4">
+                    📊
+                </div>
 
-                    <p class="text-gray-500 mt-2">
-                        Smart Recommendation
-                    </p>
+                <h3 class="text-3xl font-bold text-purple-700 mb-6">
+                    AI Statistics
+                </h3>
 
-                    <p class="text-5xl font-bold text-red-600 mt-5">
-                        Coming Soon
-                    </p>
+                <div class="grid grid-cols-2 gap-4">
+
+                    <div class="bg-red-100 rounded-xl p-4 text-center">
+
+                        <p class="text-gray-600">Total Donors</p>
+
+                        <h2 class="text-4xl font-bold text-red-700">
+                            {{ total_donors }}
+                        </h2>
+
+                    </div>
+
+                    <div class="bg-blue-100 rounded-xl p-4 text-center">
+
+                        <p class="text-gray-600">Requests</p>
+
+                        <h2 class="text-4xl font-bold text-blue-700">
+                            {{ total_requests }}
+                        </h2>
+
+                    </div>
+
+                    <div class="bg-green-100 rounded-xl p-4 text-center">
+
+                        <p class="text-gray-600">Blood Groups</p>
+
+                        <h2 class="text-4xl font-bold text-green-700">
+                            8
+                        </h2>
+
+                    </div>
+
+                    <div class="bg-yellow-100 rounded-xl p-4 text-center">
+
+                        <p class="text-gray-600">AI Status</p>
+
+                        <h2 class="text-2xl font-bold text-yellow-700">
+                            Active
+                        </h2>
+
+                    </div>
 
                 </div>
 
-            </a>
+            </div>
+
+        </div>
+
+        <!-- AI Insights -->
+
+        <div class="mt-10 bg-white rounded-3xl shadow-lg p-8 border-l-8 border-indigo-600">
+
+            <h2 class="text-3xl font-bold text-indigo-700 mb-6">
+                🤖 AI Insights
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+
+                <div class="bg-red-50 p-5 rounded-xl">
+                    <h3 class="font-bold text-red-700">
+                        Most Needed Blood Group
+                    </h3>
+
+                    <p class="text-xl mt-2">
+                        O-
+                    </p>
+                </div>
+
+                <div class="bg-green-50 p-5 rounded-xl">
+                    <h3 class="font-bold text-green-700">
+                        AI Recommendation
+                    </h3>
+
+                    <p class="mt-2">
+                        Register more rare blood group donors for better emergency support.
+                    </p>
+                </div>
+
+            </div>
 
         </div>
 
@@ -126,4 +294,4 @@
 
 </body>
 
-</html>
+</html>           
