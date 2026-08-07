@@ -136,7 +136,7 @@
         </div>
 
     </div>
-        "recommended_donors": recommended_donors,
+ 
     {% if priority %}
 
         <div class="bg-yellow-100 border-l-4 border-yellow-600 p-6 rounded-xl mt-6">
@@ -179,16 +179,24 @@
                 <div class="bg-white p-5 rounded-xl shadow">
 
                     <h3 class="text-xl font-bold">
-                        {{ donor.full_name }}
+                        {{ donor.donor.full_name }}
                     </h3>
 
-                    <p><strong>Blood:</strong> {{ donor.blood_group }}</p>
+                    <p><strong>Blood:</strong> {{ donor.donor.blood_group }}</p>
 
-                    <p><strong>District:</strong> {{ donor.district }}</p>
+                    <p><strong>District:</strong> {{ donor.donor.district }}</p>
 
-                    <p><strong>Phone:</strong> {{ donor.mobile }}</p>
+                    <p><strong>Phone:</strong> {{ donor.donor.mobile }}</p>
+                    
+                    <p class="text-blue-700 font-bold">
+                    AI Score : {{ donor.score }}%
+                    </p>
 
-                    <a href="tel:{{ donor.mobile }}"
+                    <p class="text-yellow-600">
+                    {{ donor.stars }}
+                    </p>
+
+                    <a href="tel:{{ donor.donor.mobile }}"
                     class="bg-green-600 text-white px-4 py-2 rounded-lg inline-block mt-3">
                         📞 Call
                     </a>
