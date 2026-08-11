@@ -2,7 +2,7 @@ import re
 from .models import EmergencyRequest                                                                                                  
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from .models import UserRegistration, EmergencyRequest
+from .models import UserRegistration, EmergencyRequest, Hospital
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -10,44 +10,65 @@ def rank_donors(donors, request_blood, request_district):
 
     ranked = []
 
+    # Blood group priority
+    blood_priority = {
+        request_blood: 60
+    }
+
+    # Exact blood group gets highest priority
     for donor in donors:
 
         score = 0
 
-        # Blood Match
+        # 1. Exact Blood Group Match
         if donor.blood_group == request_blood:
             score += 60
+
+        # 2. Compatible Blood Group
         else:
             score += 40
 
-        # District Match
-        if donor.district.lower() == request_district.lower():
+        # 3. Same District
+        if donor.district.lower().strip() == request_district.lower().strip():
             score += 30
 
-        # AI Bonus
+        # 4. AI Recommendation Bonus
         score += 10
 
-        # Stars
+        # Maximum score = 100
+        if score > 100:
+            score = 100
+
+        # Match Level
         if score >= 95:
             stars = "⭐⭐⭐⭐⭐ Best Match"
+            match_level = "Excellent Match"
 
         elif score >= 80:
-            stars = "⭐⭐⭐⭐ Excellent"
+            stars = "⭐⭐⭐⭐ Very Good Match"
+            match_level = "Very Good Match"
 
         elif score >= 60:
-            stars = "⭐⭐⭐ Good"
+            stars = "⭐⭐⭐ Good Match"
+            match_level = "Good Match"
 
         else:
-            stars = "⭐⭐ Average"
+            stars = "⭐⭐ Average Match"
+            match_level = "Average Match"
 
         ranked.append({
 
             "donor": donor,
+
             "score": score,
-            "stars": stars
+
+            "stars": stars,
+
+            "match_level": match_level
 
         })
 
+    # Highest score first
     ranked.sort(
         key=lambda x: x["score"],
         reverse=True
@@ -297,7 +318,63 @@ def dashboard(request):
         'total_donors': total_donors,
         'total_requests': total_requests,
     })
+def profile(request):
 
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')
+
+    user = UserRegistration.objects.get(
+        id=user_id
+    )
+
+    return render(
+        request,
+        'profile.html',
+        {
+            'user': user
+        }
+    )
+def edit_profile(request):
+
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')
+
+    user = UserRegistration.objects.get(
+        id=user_id
+    )
+
+    if request.method == "POST":
+
+        user.full_name = request.POST.get('full_name')
+        user.mobile = request.POST.get('mobile')
+        user.email = request.POST.get('email')
+        user.district = request.POST.get('district')
+        user.thana = request.POST.get('thana')
+        user.union = request.POST.get('union')
+        user.village = request.POST.get('village')
+        user.latitude = request.POST.get('latitude')
+        user.longitude = request.POST.get('longitude')
+
+        user.save()
+
+        messages.success(
+            request,
+            "Profile Updated Successfully!"
+        )
+
+        return redirect('profile')
+
+    return render(
+        request,
+        'edit_profile.html',
+        {
+            'user': user
+        }
+    )
 
 def logout_view(request):
 
@@ -373,7 +450,6 @@ def emergency_request(request):
             {
                 "requests": requests,
                 "compatible_donors": compatible_donors,
-                "recommended_donors": recommended_donors,
                 "priority": priority,
             },
         )
@@ -386,7 +462,6 @@ def emergency_request(request):
         {
             "requests": requests,
             "compatible_donors": compatible_donors,
-            "recommended_donors": recommended_donors,
             "priority": priority,
         },
     )
@@ -394,4 +469,37 @@ def health_tips(request):
     return render(
         request,
         'health_tips.html'
+    )
+
+def blood_map(request):
+
+    donors = UserRegistration.objects.exclude(
+        latitude__isnull=True
+    ).exclude(
+        longitude__isnull=True
+    ).values(
+        'full_name',
+        'blood_group',
+        'district',
+        'latitude',
+        'longitude'
+    )
+
+    hospitals = Hospital.objects.all().values(
+        'name',
+        'district',
+        'address',
+        'latitude',
+        'longitude',
+        'emergency_service',
+        'contact_number'
+    )
+
+    return render(
+        request,
+        'map.html',
+        {
+            'donors': list(donors),
+            'hospitals': list(hospitals),
+        }
     )

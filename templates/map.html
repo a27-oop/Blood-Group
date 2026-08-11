@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Blood & Hospital Map - LifeLink AI</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Leaflet CSS -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+
+        #map {
+            height: 600px;
+            width: 100%;
+            border-radius: 20px;
+        }
+
+    </style>
+
+</head>
+
+
+<body class="bg-red-50 min-h-screen">
+
+
+    <!-- Navbar -->
+
+    <nav class="bg-red-700 text-white p-4 flex justify-between items-center">
+
+        <h1 class="text-2xl font-bold">
+            LifeLink AI
+        </h1>
+
+        <a href="/dashboard/"
+           class="bg-white text-red-700 px-5 py-2 rounded-lg">
+
+            Dashboard
+
+        </a>
+
+    </nav>
+
+
+    <!-- Main -->
+
+    <div class="max-w-7xl mx-auto p-8">
+
+        <h2 class="text-4xl font-bold text-red-700 mb-2">
+
+            🗺️ Blood & Hospital Map
+
+        </h2>
+
+        <p class="text-gray-600 mb-6">
+
+            Find blood donors and hospitals on the map.
+
+        </p>
+
+
+        <!-- Map -->
+
+        <div class="bg-white p-4 rounded-2xl shadow-lg">
+
+            <div id="map"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Leaflet JavaScript -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    <!-- Django Donor Data -->
+
+    {{ donors|json_script:"donor-data" }}
+
+
+    <script>
+
+        // =========================
+        // CREATE MAP
+        // =========================
+
+        var map = L.map('map').setView(
+            [23.8103, 90.4125],
+            12
+        );
+
+
+        // =========================
+        // OPEN STREET MAP
+        // =========================
+
+        L.tileLayer(
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                maxZoom: 19,
+
+                attribution:
+                    '&copy; OpenStreetMap contributors'
+            }
+        ).addTo(map);
+
+
+        // =========================
+        // GET DONORS
+        // =========================
+
+        var donors = JSON.parse(
+
+            document
+                .getElementById('donor-data')
+                .textContent
+
+        );
+
+
+        console.log("Donors:", donors);
+
+
+        // =========================
+        // ADD DONOR MARKERS
+        // =========================
+
+        donors.forEach(function(donor) {
+
+            var marker = L.marker([
+
+                parseFloat(donor.latitude),
+
+                parseFloat(donor.longitude)
+
+            ]).addTo(map);
+
+
+            marker.bindPopup(
+
+                "<div>" +
+
+                "<h3 style='font-size:18px;font-weight:bold;'>🩸 Blood Donor</h3>" +
+
+                "<p><b>Name:</b> " +
+                donor.full_name +
+                "</p>" +
+
+                "<p><b>Blood Group:</b> " +
+                donor.blood_group +
+                "</p>" +
+
+                "<p><b>District:</b> " +
+                donor.district +
+                "</p>" +
+
+                "</div>"
+
+            );
+
+        });
+</script>
+{{ hospitals|json_script:"hospital-data" }}
+
+<script>
+
+    var hospitals = JSON.parse(
+        document.getElementById('hospital-data').textContent
+    );
+
+    console.log("Hospitals:", hospitals);
+
+
+    hospitals.forEach(function(hospital) {
+
+        var marker = L.marker([
+
+            parseFloat(hospital.latitude),
+
+            parseFloat(hospital.longitude)
+
+        ]).addTo(map);
+
+
+        marker.bindPopup(
+
+            "<div>" +
+
+            "<h3 style='font-size:18px;font-weight:bold;'>🏥 Hospital</h3>" +
+
+            "<p><b>Name:</b> " +
+            hospital.name +
+            "</p>" +
+
+            "<p><b>District:</b> " +
+            hospital.district +
+            "</p>" +
+
+            "<p><b>Address:</b> " +
+            hospital.address +
+            "</p>" +
+
+            "<p><b>Emergency:</b> " +
+            (hospital.emergency_service ? "Available" : "Not Available") +
+            "</p>" +
+
+            "<p><b>Contact:</b> " +
+            hospital.contact_number +
+            "</p>" +
+
+            "</div>"
+
+        );
+
+    });
+
+</script>
+
+    </script>
+
+
+</body>
+
+</html>

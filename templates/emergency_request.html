@@ -159,7 +159,142 @@
     {% endif %}
 
         </div>
+        <!-- AI Recommended Donors -->
 
+{% if recommended_donors %}
+
+<div class="bg-green-50 border-l-4 border-green-600 p-6 rounded-xl shadow-lg mt-8 mb-10">
+
+    <div class="flex items-center justify-between mb-5">
+
+        <div>
+            <h2 class="text-3xl font-bold text-green-700">
+                🤖 AI Recommended Donors
+            </h2>
+
+            <p class="text-gray-600 mt-1">
+                Best compatible donors for this emergency request
+            </p>
+        </div>
+
+        <span class="bg-green-600 text-white px-4 py-2 rounded-full">
+            AI Active
+        </span>
+
+    </div>
+
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        {% for item in recommended_donors %}
+
+        <div class="bg-white p-6 rounded-xl shadow border">
+
+            <!-- Donor Name -->
+
+            <div class="flex justify-between items-center mb-4">
+
+                <h3 class="text-2xl font-bold text-gray-800">
+
+                    {{ item.donor.full_name }}
+
+                </h3>
+
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+
+                    {{ item.match_level }}
+
+                </span>
+
+            </div>
+
+
+            <!-- Donor Information -->
+
+            <p class="mb-2">
+
+                <strong>Blood Group:</strong>
+
+                {{ item.donor.blood_group }}
+
+            </p>
+
+
+            <p class="mb-2">
+
+                <strong>District:</strong>
+
+                {{ item.donor.district }}
+
+            </p>
+
+
+            <p class="mb-4">
+
+                <strong>Phone:</strong>
+
+                {{ item.donor.mobile }}
+
+            </p>
+
+
+            <!-- AI Score -->
+
+            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+
+                <p class="text-blue-700 font-bold">
+
+                    🤖 AI Match Score
+
+                </p>
+
+                <p class="text-3xl font-bold text-blue-600">
+
+                    {{ item.score }}%
+
+                </p>
+
+                <p class="text-yellow-600 mt-1">
+
+                    {{ item.stars }}
+
+                </p>
+
+            </div>
+
+
+            <!-- Contact Button -->
+
+            <a href="tel:{{ item.donor.mobile }}"
+
+               class="inline-block bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700">
+
+                📞 Call Donor
+
+            </a>
+
+
+            <!-- WhatsApp -->
+
+            <a href="https://wa.me/88{{ item.donor.mobile }}"
+
+               target="_blank"
+
+               class="inline-block bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 ml-2">
+
+                💬 WhatsApp
+
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endif %}
         <!-- Recent Requests -->
 
         <h2 class="text-3xl font-bold text-red-700 mb-4">

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - LifeLink AI</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-red-50 min-h-screen">
+
+
+    <!-- Navbar -->
+
+    <nav class="bg-red-700 text-white p-4 flex justify-between items-center">
+
+        <h1 class="text-2xl font-bold">
+            LifeLink AI
+        </h1>
+
+        <a href="/dashboard/"
+           class="bg-white text-red-700 px-5 py-2 rounded-lg">
+
+            Dashboard
+
+        </a>
+
+    </nav>
+
+
+    <!-- Profile -->
+
+    <div class="max-w-4xl mx-auto p-8">
+
+
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+
+
+            <!-- Header -->
+
+            <div class="bg-red-700 text-white p-8 text-center">
+
+                <div class="text-6xl mb-3">
+                    👤
+                </div>
+
+                <h2 class="text-3xl font-bold">
+
+                    {{ user.full_name }}
+
+                </h2>
+
+                <p class="mt-2">
+
+                    LifeLink AI Donor Profile
+
+                </p>
+
+            </div>
+
+
+            <!-- Information -->
+
+            <div class="p-8">
+
+
+                <h3 class="text-2xl font-bold text-red-700 mb-6">
+
+                    Personal Information
+
+                </h3>
+
+
+                <div class="grid md:grid-cols-2 gap-5">
+
+
+                    <!-- Name -->
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            Full Name
+                        </p>
+
+                        <p class="text-lg font-semibold">
+                            {{ user.full_name }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Blood -->
+
+                    <div class="bg-red-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            Blood Group
+                        </p>
+
+                        <p class="text-2xl font-bold text-red-600">
+                            🩸 {{ user.blood_group }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Mobile -->
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            Mobile
+                        </p>
+
+                        <p class="text-lg font-semibold">
+                            {{ user.mobile }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            Email
+                        </p>
+
+                        <p class="text-lg font-semibold">
+                            {{ user.email }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- University -->
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            University
+                        </p>
+
+                        <p class="text-lg font-semibold">
+                            {{ user.university }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Student ID -->
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            Student ID
+                        </p>
+
+                        <p class="text-lg font-semibold">
+                            {{ user.student_id }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Location -->
+
+                <h3 class="text-2xl font-bold text-red-700 mt-10 mb-6">
+
+                    📍 Location
+
+                </h3>
+
+
+                <div class="grid md:grid-cols-2 gap-5">
+
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            District
+                        </p>
+
+                        <p class="font-semibold">
+                            {{ user.district }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            Thana
+                        </p>
+
+                        <p class="font-semibold">
+                            {{ user.thana }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            Union
+                        </p>
+
+                        <p class="font-semibold">
+                            {{ user.union }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="bg-gray-50 p-4 rounded-xl">
+
+                        <p class="text-gray-500">
+                            Village
+                        </p>
+
+                        <p class="font-semibold">
+                            {{ user.village }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Map Location -->
+
+                <div class="bg-blue-50 p-5 rounded-xl mt-6">
+
+                    <h3 class="font-bold text-blue-700 mb-2">
+
+                        🗺️ Map Location
+
+                    </h3>
+
+                    <p>
+
+                        Latitude:
+                        {{ user.latitude|default:"Not Set" }}
+
+                    </p>
+
+                    <p>
+
+                        Longitude:
+                        {{ user.longitude|default:"Not Set" }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- Edit Button -->
+
+                <div class="mt-8 text-center">
+
+                    <a
+                        href="/edit-profile/"
+                        class="bg-red-600 text-white px-8 py-3 rounded-xl hover:bg-red-700 font-semibold inline-block">
+
+                        ✏️ Edit Profile
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
