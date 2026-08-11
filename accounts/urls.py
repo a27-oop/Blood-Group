@@ -14,6 +14,8 @@ urlpatterns = [
 
     path('find-donor/', views.donor_search, name='find_donor'),
 
+    path('blood-map/', views.blood_map, name='blood_map'),
+
     path(
     'emergency-request/',
     views.emergency_request,
@@ -23,6 +25,16 @@ urlpatterns = [
     'health-tips/',
     views.health_tips,
     name='health_tips'),
+
+    path(
+    'profile/',
+    views.profile,
+    name='profile'),
+
+    path(
+    'edit-profile/',
+    views.edit_profile,
+    name='edit_profile'),
     
 
 

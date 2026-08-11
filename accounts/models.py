@@ -49,6 +49,16 @@ class UserRegistration(models.Model):
 
     village = models.CharField(max_length=100)
 
+    latitude = models.FloatField(
+    null=True,
+    blank=True
+)
+
+    longitude = models.FloatField(
+        null=True,
+        blank=True
+    )
+
     password = models.CharField(max_length=255)
 
     unique_code = models.CharField(
@@ -61,7 +71,27 @@ class UserRegistration(models.Model):
 
     def __str__(self):
         return self.full_name
-    
+class Hospital(models.Model):
+
+    name = models.CharField(max_length=200)
+
+    district = models.CharField(max_length=100)
+
+    address = models.CharField(max_length=300)
+
+    latitude = models.FloatField()
+
+    longitude = models.FloatField()
+
+    emergency_service = models.BooleanField(default=True)
+
+    contact_number = models.CharField(
+        max_length=20,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.name   
 class EmergencyRequest(models.Model):
 
     patient_name = models.CharField(max_length=100)
