@@ -13,7 +13,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Leaflet CSS -->
-
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -25,6 +24,16 @@
             height: 600px;
             width: 100%;
             border-radius: 20px;
+        }
+
+        .donor-icon {
+            font-size: 30px;
+            text-align: center;
+        }
+
+        .hospital-icon {
+            font-size: 30px;
+            text-align: center;
         }
 
     </style>
@@ -40,11 +49,11 @@
     <nav class="bg-red-700 text-white p-4 flex justify-between items-center">
 
         <h1 class="text-2xl font-bold">
-            LifeLink AI
+            🩸 LifeLink AI
         </h1>
 
         <a href="/dashboard/"
-           class="bg-white text-red-700 px-5 py-2 rounded-lg">
+           class="bg-white text-red-700 px-5 py-2 rounded-lg font-semibold hover:bg-gray-100">
 
             Dashboard
 
@@ -57,17 +66,56 @@
 
     <div class="max-w-7xl mx-auto p-8">
 
-        <h2 class="text-4xl font-bold text-red-700 mb-2">
 
-            🗺️ Blood & Hospital Map
+        <!-- Title -->
 
-        </h2>
+        <div class="mb-6">
 
-        <p class="text-gray-600 mb-6">
+            <h2 class="text-4xl font-bold text-red-700 mb-2">
 
-            Find blood donors and hospitals on the map.
+                🗺️ Blood & Hospital Map
 
-        </p>
+            </h2>
+
+            <p class="text-gray-600">
+
+                Find nearby blood donors and hospitals.
+
+            </p>
+
+        </div>
+
+
+        <!-- Legend -->
+
+        <div class="bg-white rounded-xl shadow p-4 mb-6 flex flex-wrap gap-6">
+
+            <div class="flex items-center gap-2">
+
+                <span class="text-2xl">
+                    🩸
+                </span>
+
+                <span class="font-semibold text-gray-700">
+                    Blood Donor
+                </span>
+
+            </div>
+
+
+            <div class="flex items-center gap-2">
+
+                <span class="text-2xl">
+                    🏥
+                </span>
+
+                <span class="font-semibold text-gray-700">
+                    Hospital
+                </span>
+
+            </div>
+
+        </div>
 
 
         <!-- Map -->
@@ -77,6 +125,7 @@
             <div id="map"></div>
 
         </div>
+
 
     </div>
 
@@ -88,16 +137,22 @@
     </script>
 
 
-    <!-- Django Donor Data -->
+    <!-- Donor Data -->
 
     {{ donors|json_script:"donor-data" }}
 
 
+    <!-- Hospital Data -->
+
+    {{ hospitals|json_script:"hospital-data" }}
+
+
     <script>
 
-        // =========================
+
+        // =====================================
         // CREATE MAP
-        // =========================
+        // =====================================
 
         var map = L.map('map').setView(
             [23.8103, 90.4125],
@@ -105,9 +160,9 @@
         );
 
 
-        // =========================
+        // =====================================
         // OPEN STREET MAP
-        // =========================
+        // =====================================
 
         L.tileLayer(
             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -120,9 +175,47 @@
         ).addTo(map);
 
 
-        // =========================
+        // =====================================
+        // DONOR ICON
+        // =====================================
+
+        var donorIcon = L.divIcon({
+
+            html: '🩸',
+
+            className: 'donor-icon',
+
+            iconSize: [35, 35],
+
+            iconAnchor: [17, 17],
+
+            popupAnchor: [0, -15]
+
+        });
+
+
+        // =====================================
+        // HOSPITAL ICON
+        // =====================================
+
+        var hospitalIcon = L.divIcon({
+
+            html: '🏥',
+
+            className: 'hospital-icon',
+
+            iconSize: [35, 35],
+
+            iconAnchor: [17, 17],
+
+            popupAnchor: [0, -15]
+
+        });
+
+
+        // =====================================
         // GET DONORS
-        // =========================
+        // =====================================
 
         var donors = JSON.parse(
 
@@ -136,100 +229,197 @@
         console.log("Donors:", donors);
 
 
-        // =========================
+        // =====================================
         // ADD DONOR MARKERS
-        // =========================
+        // =====================================
 
         donors.forEach(function(donor) {
 
-            var marker = L.marker([
 
-                parseFloat(donor.latitude),
+            var latitude =
+                parseFloat(donor.latitude);
 
-                parseFloat(donor.longitude)
 
-            ]).addTo(map);
+            var longitude =
+                parseFloat(donor.longitude);
+
+
+            if (
+                isNaN(latitude) ||
+                isNaN(longitude)
+            ) {
+
+                return;
+
+            }
+
+
+            var marker = L.marker(
+
+                [latitude, longitude],
+
+                {
+                    icon: donorIcon
+                }
+
+            ).addTo(map);
 
 
             marker.bindPopup(
 
-                "<div>" +
+                `
+                <div style="min-width:200px">
 
-                "<h3 style='font-size:18px;font-weight:bold;'>🩸 Blood Donor</h3>" +
+                    <h3 style="
+                        font-size:20px;
+                        font-weight:bold;
+                        color:#dc2626;
+                        margin-bottom:10px;
+                    ">
 
-                "<p><b>Name:</b> " +
-                donor.full_name +
-                "</p>" +
+                        🩸 Blood Donor
 
-                "<p><b>Blood Group:</b> " +
-                donor.blood_group +
-                "</p>" +
+                    </h3>
 
-                "<p><b>District:</b> " +
-                donor.district +
-                "</p>" +
 
-                "</div>"
+                    <p>
+                        <b>Name:</b>
+                        ${donor.full_name}
+                    </p>
+
+
+                    <p>
+                        <b>Blood Group:</b>
+                        ${donor.blood_group}
+                    </p>
+
+
+                    <p>
+                        <b>District:</b>
+                        ${donor.district}
+                    </p>
+
+
+                </div>
+                `
 
             );
 
         });
-</script>
-{{ hospitals|json_script:"hospital-data" }}
-
-<script>
-
-    var hospitals = JSON.parse(
-        document.getElementById('hospital-data').textContent
-    );
-
-    console.log("Hospitals:", hospitals);
 
 
-    hospitals.forEach(function(hospital) {
+        // =====================================
+        // GET HOSPITALS
+        // =====================================
 
-        var marker = L.marker([
+        var hospitals = JSON.parse(
 
-            parseFloat(hospital.latitude),
-
-            parseFloat(hospital.longitude)
-
-        ]).addTo(map);
-
-
-        marker.bindPopup(
-
-            "<div>" +
-
-            "<h3 style='font-size:18px;font-weight:bold;'>🏥 Hospital</h3>" +
-
-            "<p><b>Name:</b> " +
-            hospital.name +
-            "</p>" +
-
-            "<p><b>District:</b> " +
-            hospital.district +
-            "</p>" +
-
-            "<p><b>Address:</b> " +
-            hospital.address +
-            "</p>" +
-
-            "<p><b>Emergency:</b> " +
-            (hospital.emergency_service ? "Available" : "Not Available") +
-            "</p>" +
-
-            "<p><b>Contact:</b> " +
-            hospital.contact_number +
-            "</p>" +
-
-            "</div>"
+            document
+                .getElementById('hospital-data')
+                .textContent
 
         );
 
-    });
 
-</script>
+        console.log("Hospitals:", hospitals);
+
+
+        // =====================================
+        // ADD HOSPITAL MARKERS
+        // =====================================
+
+        hospitals.forEach(function(hospital) {
+
+
+            var latitude =
+                parseFloat(hospital.latitude);
+
+
+            var longitude =
+                parseFloat(hospital.longitude);
+
+
+            if (
+                isNaN(latitude) ||
+                isNaN(longitude)
+            ) {
+
+                return;
+
+            }
+
+
+            var marker = L.marker(
+
+                [latitude, longitude],
+
+                {
+                    icon: hospitalIcon
+                }
+
+            ).addTo(map);
+
+
+            marker.bindPopup(
+
+                `
+                <div style="min-width:220px">
+
+                    <h3 style="
+                        font-size:20px;
+                        font-weight:bold;
+                        color:#2563eb;
+                        margin-bottom:10px;
+                    ">
+
+                        🏥 Hospital
+
+                    </h3>
+
+
+                    <p>
+                        <b>Name:</b>
+                        ${hospital.name}
+                    </p>
+
+
+                    <p>
+                        <b>District:</b>
+                        ${hospital.district}
+                    </p>
+
+
+                    <p>
+                        <b>Address:</b>
+                        ${hospital.address}
+                    </p>
+
+
+                    <p>
+                        <b>Emergency:</b>
+
+                        ${
+                            hospital.emergency_service
+                            ? "Available"
+                            : "Not Available"
+                        }
+
+                    </p>
+
+
+                    <p>
+                        <b>Contact:</b>
+                        ${hospital.contact_number}
+                    </p>
+
+
+                </div>
+                `
+
+            );
+
+        });
+
 
     </script>
 
