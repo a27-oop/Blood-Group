@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-#wfpcbr+brf^&+xxe)90&grph7cahv%@h84h(lltu-map2yvua
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "blood-group-gm02.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
