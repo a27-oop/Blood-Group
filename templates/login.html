@@ -13,22 +13,42 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <style>
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            margin: 0;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background-color: #7f1d1d;
+
+            background-image: url("{% static 'images/blood-bg.jpg' %}") !important;
+
+            background-size: cover;
+
+            background-position: center;
+
+            background-repeat: no-repeat;
+
+            background-attachment: fixed;
+        }
+
+    </style>
+
 </head>
 
 
 <body class="min-h-screen flex items-center justify-center">
-    <style>
-        body{
-            background-image: url("{% static 'images/blood-bg.jpg' %}");
-            height: 100vh;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
 
-        }
-    </style>
 
-    <!-- Top Left Logo -->
+    <!-- ============================= -->
+    <!-- TOP LEFT LOGO -->
+    <!-- ============================= -->
 
     <div class="fixed top-6 left-6 flex items-center gap-3 z-50">
 
@@ -40,7 +60,12 @@
             LifeLink AI
         </h1>
 
-    </div>    
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- LOGIN CARD -->
+    <!-- ============================= -->
 
     <div class="bg-white/10 backdrop-blur-lg p-10 rounded-3xl shadow-2xl w-[450px] border border-white/20">
 
@@ -48,43 +73,76 @@
         <!-- Heading -->
 
         <h2 class="text-3xl font-bold text-white text-center mb-4">
+
             Welcome
+
         </h2>
 
+
         <p class="text-center text-white mb-8 text-xl">
+
             আপনার রক্ত দানই পারে কারো জীবন বাঁচাতে ❤️
+
         </p>
 
-        <!-- Login Form -->
+
+        <!-- ============================= -->
+        <!-- LOGIN FORM -->
+        <!-- ============================= -->
 
         <form method="POST">
 
             {% csrf_token %}
 
-            <input type="text"
-                   name="student_id"
-                   placeholder="Student ID"
-                   class="w-full p-4 mb-5 rounded-xl bg-white/90 outline-none"
-                   required>
 
-            <input type="password"
-                   name="password"
-                   placeholder="Password"
-                   class="w-full p-4 mb-6 rounded-xl bg-white/90 outline-none"
-                   required>
+            <!-- Student ID -->
 
-            <button class="w-full bg-red-700 hover:bg-red-800 text-white p-4 rounded-xl text-lg font-bold transition">
+            <input
+                type="text"
+                name="student_id"
+                placeholder="Student ID"
+                class="w-full p-4 mb-5 rounded-xl bg-white/90 outline-none"
+                required
+            >
+
+
+            <!-- Password -->
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                class="w-full p-4 mb-6 rounded-xl bg-white/90 outline-none"
+                required
+            >
+
+
+            <!-- Login Button -->
+
+            <button
+                type="submit"
+                class="w-full bg-red-700 hover:bg-red-800 text-white p-4 rounded-xl text-lg font-bold transition"
+            >
+
                 Login
+
             </button>
 
         </form>
+
+
+        <!-- ============================= -->
+        <!-- CREATE ACCOUNT -->
+        <!-- ============================= -->
 
         <p class="text-center text-white mt-6">
 
             Don't have an account?
 
-            <a href="/register/"
-               class="font-bold text-red-300 hover:text-red-200">
+            <a
+                href="/register/"
+                class="font-bold text-red-300 hover:text-red-200"
+            >
 
                 Create Account
 
@@ -92,7 +150,9 @@
 
         </p>
 
+
     </div>
+
 
 </body>
 
