@@ -36,6 +36,11 @@
             text-align: center;
         }
 
+        .emergency-icon {
+            font-size: 30px;
+            text-align: center;
+        }
+
     </style>
 
 </head>
@@ -44,7 +49,9 @@
 <body class="bg-red-50 min-h-screen">
 
 
-    <!-- Navbar -->
+    <!-- ============================= -->
+    <!-- NAVBAR -->
+    <!-- ============================= -->
 
     <nav class="bg-red-700 text-white p-4 flex justify-between items-center">
 
@@ -62,12 +69,14 @@
     </nav>
 
 
-    <!-- Main -->
+    <!-- ============================= -->
+    <!-- MAIN -->
+    <!-- ============================= -->
 
     <div class="max-w-7xl mx-auto p-8">
 
 
-        <!-- Title -->
+        <!-- TITLE -->
 
         <div class="mb-6">
 
@@ -79,16 +88,21 @@
 
             <p class="text-gray-600">
 
-                Find nearby blood donors and hospitals.
+                Find nearby blood donors, hospitals and emergency requests.
 
             </p>
 
         </div>
 
 
-        <!-- Legend -->
+        <!-- ============================= -->
+        <!-- LEGEND -->
+        <!-- ============================= -->
 
         <div class="bg-white rounded-xl shadow p-4 mb-6 flex flex-wrap gap-6">
+
+
+            <!-- Donor -->
 
             <div class="flex items-center gap-2">
 
@@ -103,6 +117,8 @@
             </div>
 
 
+            <!-- Hospital -->
+
             <div class="flex items-center gap-2">
 
                 <span class="text-2xl">
@@ -115,10 +131,28 @@
 
             </div>
 
+
+            <!-- Emergency -->
+
+            <div class="flex items-center gap-2">
+
+                <span class="text-2xl">
+                    🚨
+                </span>
+
+                <span class="font-semibold text-gray-700">
+                    Emergency Request
+                </span>
+
+            </div>
+
+
         </div>
 
 
-        <!-- Map -->
+        <!-- ============================= -->
+        <!-- MAP -->
+        <!-- ============================= -->
 
         <div class="bg-white p-4 rounded-2xl shadow-lg">
 
@@ -130,54 +164,66 @@
     </div>
 
 
-    <!-- Leaflet JavaScript -->
+    <!-- ============================= -->
+    <!-- LEAFLET JAVASCRIPT -->
+    <!-- ============================= -->
 
     <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
     </script>
 
 
-    <!-- Donor Data -->
+    <!-- ============================= -->
+    <!-- DJANGO DATA -->
+    <!-- ============================= -->
 
     {{ donors|json_script:"donor-data" }}
 
-
-    <!-- Hospital Data -->
-
     {{ hospitals|json_script:"hospital-data" }}
+
+    {{ emergency_requests|json_script:"emergency-data" }}
 
 
     <script>
 
 
-        // =====================================
+        // =========================================
         // CREATE MAP
-        // =====================================
+        // =========================================
 
         var map = L.map('map').setView(
+
             [23.8103, 90.4125],
+
             12
+
         );
 
 
-        // =====================================
+        // =========================================
         // OPEN STREET MAP
-        // =====================================
+        // =========================================
 
         L.tileLayer(
+
             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+
             {
+
                 maxZoom: 19,
 
                 attribution:
                     '&copy; OpenStreetMap contributors'
+
             }
+
         ).addTo(map);
 
 
-        // =====================================
+
+        // =========================================
         // DONOR ICON
-        // =====================================
+        // =========================================
 
         var donorIcon = L.divIcon({
 
@@ -194,9 +240,10 @@
         });
 
 
-        // =====================================
+
+        // =========================================
         // HOSPITAL ICON
-        // =====================================
+        // =========================================
 
         var hospitalIcon = L.divIcon({
 
@@ -213,9 +260,30 @@
         });
 
 
-        // =====================================
+
+        // =========================================
+        // EMERGENCY ICON
+        // =========================================
+
+        var emergencyIcon = L.divIcon({
+
+            html: '🚨',
+
+            className: 'emergency-icon',
+
+            iconSize: [35, 35],
+
+            iconAnchor: [17, 17],
+
+            popupAnchor: [0, -15]
+
+        });
+
+
+
+        // =========================================
         // GET DONORS
-        // =====================================
+        // =========================================
 
         var donors = JSON.parse(
 
@@ -229,9 +297,10 @@
         console.log("Donors:", donors);
 
 
-        // =====================================
+
+        // =========================================
         // ADD DONOR MARKERS
-        // =====================================
+        // =========================================
 
         donors.forEach(function(donor) {
 
@@ -244,9 +313,15 @@
                 parseFloat(donor.longitude);
 
 
+
+            // Ignore invalid location
+
             if (
+
                 isNaN(latitude) ||
+
                 isNaN(longitude)
+
             ) {
 
                 return;
@@ -254,20 +329,25 @@
             }
 
 
+
             var marker = L.marker(
 
                 [latitude, longitude],
 
                 {
+
                     icon: donorIcon
+
                 }
 
             ).addTo(map);
 
 
+
             marker.bindPopup(
 
                 `
+
                 <div style="min-width:200px">
 
                     <h3 style="
@@ -301,6 +381,7 @@
 
 
                 </div>
+
                 `
 
             );
@@ -308,9 +389,10 @@
         });
 
 
-        // =====================================
+
+        // =========================================
         // GET HOSPITALS
-        // =====================================
+        // =========================================
 
         var hospitals = JSON.parse(
 
@@ -324,9 +406,10 @@
         console.log("Hospitals:", hospitals);
 
 
-        // =====================================
+
+        // =========================================
         // ADD HOSPITAL MARKERS
-        // =====================================
+        // =========================================
 
         hospitals.forEach(function(hospital) {
 
@@ -339,9 +422,15 @@
                 parseFloat(hospital.longitude);
 
 
+
+            // Ignore invalid location
+
             if (
+
                 isNaN(latitude) ||
+
                 isNaN(longitude)
+
             ) {
 
                 return;
@@ -349,20 +438,25 @@
             }
 
 
+
             var marker = L.marker(
 
                 [latitude, longitude],
 
                 {
+
                     icon: hospitalIcon
+
                 }
 
             ).addTo(map);
 
 
+
             marker.bindPopup(
 
                 `
+
                 <div style="min-width:220px">
 
                     <h3 style="
@@ -414,11 +508,152 @@
 
 
                 </div>
+
                 `
 
             );
 
         });
+
+
+
+        // =========================================
+        // GET EMERGENCY REQUESTS
+        // =========================================
+
+        var emergencyRequests = JSON.parse(
+
+            document
+                .getElementById('emergency-data')
+                .textContent
+
+        );
+
+
+        console.log(
+            "Emergency Requests:",
+            emergencyRequests
+        );
+
+
+
+        // =========================================
+        // ADD EMERGENCY MARKERS
+        // =========================================
+
+        emergencyRequests.forEach(function(emergency) {
+
+
+            var latitude =
+                parseFloat(emergency.latitude);
+
+
+            var longitude =
+                parseFloat(emergency.longitude);
+
+
+
+            // Ignore invalid location
+
+            if (
+
+                isNaN(latitude) ||
+
+                isNaN(longitude)
+
+            ) {
+
+                return;
+
+            }
+
+
+
+            var marker = L.marker(
+
+                [latitude, longitude],
+
+                {
+
+                    icon: emergencyIcon
+
+                }
+
+            ).addTo(map);
+
+
+
+            marker.bindPopup(
+
+                `
+
+                <div style="min-width:230px">
+
+                    <h3 style="
+                        font-size:20px;
+                        font-weight:bold;
+                        color:#dc2626;
+                        margin-bottom:10px;
+                    ">
+
+                        🚨 Emergency Request
+
+                    </h3>
+
+
+                    <p>
+                        <b>Patient:</b>
+                        ${emergency.patient_name}
+                    </p>
+
+
+                    <p>
+                        <b>Blood Group:</b>
+                        ${emergency.blood_group}
+                    </p>
+
+
+                    <p>
+                        <b>Hospital:</b>
+                        ${emergency.hospital}
+                    </p>
+
+
+                    <p>
+                        <b>District:</b>
+                        ${emergency.district}
+                    </p>
+
+
+                    <p>
+                        <b>Contact:</b>
+                        ${emergency.contact_number}
+                    </p>
+
+
+                    <p>
+                        <b>Message:</b>
+                        ${emergency.message}
+                    </p>
+
+
+                </div>
+
+                `
+
+            );
+
+        });
+
+
+
+        // =========================================
+        // FINISHED
+        // =========================================
+
+        console.log(
+            "LifeLink AI Map Loaded Successfully!"
+        );
 
 
     </script>

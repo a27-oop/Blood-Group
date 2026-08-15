@@ -100,6 +100,10 @@ class EmergencyRequest(models.Model):
 
     district = models.CharField(max_length=100)
 
+    latitude = models.FloatField(null=True, blank=True)
+
+    longitude = models.FloatField(null=True, blank=True)
+
     hospital = models.CharField(max_length=200)
 
     contact_number = models.CharField(max_length=11)

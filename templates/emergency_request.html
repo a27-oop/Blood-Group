@@ -12,6 +12,21 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+        #emergency-map {
+            height: 400px;
+            width: 100%;
+            border-radius: 16px;
+            z-index: 1;
+        }
+    </style>
+
 </head>
 
 <body class="bg-red-100 min-h-screen">
@@ -74,6 +89,41 @@
                        placeholder="District"
                        class="p-3 border rounded-lg"
                        required>
+
+
+                <!-- Emergency Location Map -->
+
+                <div class="col-span-full mt-4">
+
+                    <label class="block text-gray-700 font-semibold mb-2">
+                        📍 Select Emergency Location
+                    </label>
+
+                    <p class="text-sm text-gray-500 mb-3">
+                        Click on the map to select the emergency/hospital location.
+                    </p>
+
+                    <div id="emergency-map"></div>
+
+                    <!-- Hidden Location Fields -->
+
+                    <input type="hidden"
+                           name="latitude"
+                           id="latitude">
+
+                    <input type="hidden"
+                           name="longitude"
+                           id="longitude">
+
+                    <p class="text-sm text-green-600 mt-2">
+                        Selected Location:
+                        <span id="location-status">
+                            Not selected
+                        </span>
+                    </p>
+
+                </div>
+
 
                 <input type="text"
                        name="hospital"
@@ -412,7 +462,72 @@
         </div>
 
     </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <script>
+
+        // Create Map
+        var emergencyMap = L.map('emergency-map').setView(
+            [23.8103, 90.4125],
+            12
+        );
+
+        // OpenStreetMap
+        L.tileLayer(
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }
+        ).addTo(emergencyMap);
+
+
+        var emergencyMarker = null;
+
+
+        // Click Map
+        emergencyMap.on('click', function(e) {
+
+            var latitude = e.latlng.lat;
+            var longitude = e.latlng.lng;
+
+
+            // Remove old marker
+            if (emergencyMarker) {
+                emergencyMap.removeLayer(emergencyMarker);
+            }
+
+
+            // Add new marker
+            emergencyMarker = L.marker([
+                latitude,
+                longitude
+            ]).addTo(emergencyMap);
+
+
+            emergencyMarker.bindPopup(
+                "🚨 Emergency Location"
+            ).openPopup();
+
+
+            // Save coordinates
+            document.getElementById('latitude').value =
+                latitude;
+
+            document.getElementById('longitude').value =
+                longitude;
+
+
+            // Show selected location
+            document.getElementById('location-status').innerText =
+                latitude.toFixed(6) +
+                ", " +
+                longitude.toFixed(6);
+
+        });
+
+    </script>
+    
 </body>
 
 </html>

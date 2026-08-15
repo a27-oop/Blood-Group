@@ -416,6 +416,8 @@ def emergency_request(request):
         patient_name = request.POST.get("patient_name")
         blood_group = request.POST.get("blood_group")
         district = request.POST.get("district")
+        latitude = request.POST.get("latitude")
+        longitude = request.POST.get("longitude")
         hospital = request.POST.get("hospital")
         contact_number = request.POST.get("contact_number")
         message = request.POST.get("message")
@@ -424,12 +426,15 @@ def emergency_request(request):
             patient_name=patient_name,
             blood_group=blood_group,
             district=district,
+            latitude=latitude,
+            longitude=longitude,
             hospital=hospital,
             contact_number=contact_number,
             message=message,
         )
 
         compatible_donors = get_compatible_donors(blood_group)
+
         donors = UserRegistration.objects.filter(
             blood_group__in=compatible_donors
         )
@@ -450,6 +455,7 @@ def emergency_request(request):
             {
                 "requests": requests,
                 "compatible_donors": compatible_donors,
+                "recommended_donors": recommended_donors,
                 "priority": priority,
             },
         )
@@ -462,6 +468,7 @@ def emergency_request(request):
         {
             "requests": requests,
             "compatible_donors": compatible_donors,
+            "recommended_donors": recommended_donors,
             "priority": priority,
         },
     )
@@ -495,11 +502,27 @@ def blood_map(request):
         'contact_number'
     )
 
+    emergency_requests = EmergencyRequest.objects.exclude(
+        latitude__isnull=True
+    ).exclude(
+        longitude__isnull=True
+    ).values(
+        'patient_name',
+        'blood_group',
+        'district',
+        'hospital',
+        'contact_number',
+        'message',
+        'latitude',
+        'longitude'
+    )
+
     return render(
         request,
         'map.html',
         {
             'donors': list(donors),
             'hospitals': list(hospitals),
+            'emergency_requests': list(emergency_requests),
         }
     )
